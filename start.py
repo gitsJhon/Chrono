@@ -17,7 +17,6 @@ try:
     while True:
         # Si Electron se cierra, terminar todo
         if electron_process.poll() is not None:
-            print("Electron cerrado. Terminando servidor...")
             server_process.terminate()
             break
 
@@ -32,4 +31,3 @@ except KeyboardInterrupt:
 electron_process.wait()
 server_process.wait()
 
-print("Todo cerrado.")
