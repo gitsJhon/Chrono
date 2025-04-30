@@ -1,24 +1,35 @@
 import requests
+import sqlite3
+import os
+from BD_driver import conectar_bd, desconectar_bd
+from apps import get_user_apps
+from datetime import date
 
-def buscar_juego_en_steam(nombre_juego):
-    url = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        data = response.json()
-        juegos = data['applist']['apps']
 
-        # Filtra por nombre exacto (puedes ajustar con lower o similitud)
-        for juego in juegos:
-            if nombre_juego.lower() in juego['name'].lower():
-                return juego
-    else:
-        print("Error al obtener datos de Steam.")
-    return None
 
-# Prueba
-resultado = buscar_juego_en_steam("Fortnite")
-if resultado:
-    print(f"Juego encontrado: {resultado}")
-else:
-    print("Juego no encontrado.")
+#registro de app
+def registrar_app(app_name,category):
+    ultima_apertura = date.today()
+    conn = conectar_bd()
+    if conn is None:
+        return False
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO apps (nombre, categoria, ultima_apertura)
+        VALUES (?, ?, ?)
+    """, (app_name, category, ultima_apertura))
+    conn.commit()
+    desconectar_bd(conn)
+    return True
+
+def ver_apps():
+    conn = conectar_bd()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM apps")
+    apps = cursor.fetchall()
+    for app in apps:
+        print(app)
+    desconectar_bd(conn)
+
+# Probar
+ver_apps()
