@@ -3,25 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <link rel="stylesheet" href="styles/index.CSS">
+  <title>Document</title>
 </head>
 <body>
-  <div class="apps-list">
-    <table id="appsTable" border="1">
-      <thead>
-        <tr>
-          <th>App</th>
-          <th>Tiempo (s)</th>
-        </tr>
-      </thead>
-      <tbody id="appsTableBody">
-        <!-- Se agregan filas dinámicamente -->
-      </tbody>
-    </table>
+  <div class="sidebar">
+    <h2>Chrono</h2>
+    <button onclick="cargarPagina('views/dashboard.html')">Dashboard</button>
+    <button onclick="cargarPagina('registro.html')">Registro de actividad</button>
+    <button onclick="cargarPagina('reportes.html')">Reportes</button>
+    <button onclick="cargarPagina('estadisticas.html')">Estadísticas</button>
+    <button onclick="cargarPagina('configuracion.html')">Configuración</button>
+    <button onclick="cambiarTema()">Cambiar tema</button>
   </div>
 
- <script src="front-end controles/actaulizar_apps.js"></script>
+  <div class="content">
+    <iframe id="contenido" src="views/dashboard.html"></iframe>
+  </div>
 </body>
 </html>
-
 
