@@ -1,53 +1,56 @@
 import requests
 import sqlite3
 import os
+import json
 from BD_driver import conectar_bd, desconectar_bd
-from apps import get_user_apps
+from process_utils import get_user_apps
 from datetime import date
 from registrar_apps import registrar_app
-import json
+import difflib
+
 def categorizar_app():
     apps = get_user_apps()
     conn = conectar_bd()
     cursor = conn.cursor()
     apps_categorizadas = []
+
     ruta_json = os.path.join(os.path.dirname(__file__), '../../assets/json/pre_apps.JSON')
-    with open(ruta_json, 'r') as file:
-        pre_apps = json.load(file)
-    url_steam = f"https://api.steampowered.com/ISteamApps/GetAppList/v2/"
+    with open(ruta_json, 'r', encoding='utf-8') as f:
+        pre_apps = json.load(f)
+    
+    pre_apps_dict = {app["nombre"].lower(): app["categoria"] for app in pre_apps}
+
+
+    url_steam = "https://api.steampowered.com/ISteamApps/GetAppList/v2/"
     response = requests.get(url_steam)
-    if response.status_code == 200:
-        data = response.json()
-        apps_steam = data["applist"]["apps"]
-    else:
-        apps_steam = []
-    steam_nombres = set(a["name"].lower() for a in apps_steam) #Tabla de steam mas rapida de buscar
+    apps_steam = response.json()["applist"]["apps"] if response.status_code == 200 else []
+    steam_nombres = set(a["name"].lower() for a in apps_steam)
+
     for app in apps:
-        cursor.execute("SELECT * FROM apps WHERE nombre = ?", (app["name"],))
+        nombre_app = app["name"]
+
+        # Buscar en base de datos local
+        cursor.execute("SELECT * FROM apps WHERE nombre = ?", (nombre_app,))
         resultado = cursor.fetchone()
-        
+
         if resultado:
-            categoria = resultado[3]  # De la consulta anterior 
-            apps_categorizadas.append({
-                "nombre": app["name"],
-                "categoria": categoria
-            })
+            categoria = resultado[2]
+        elif nombre_app.lower() in pre_apps_dict:
+            # Buscar en JSON local
+            categoria = pre_apps_dict[nombre_app.lower()]
+            registrar_app(nombre_app, categoria)
         else:
-            #en este punto es que no esta en la base de datos
-            #Buscamos en la lista descargada de steam
-            if  app["name"].lower() in steam_nombres: #En este caso la app esta en steam
-                apps_categorizadas.append({
-                    "nombre": app["name"],
-                    "categoria": "Ocio"
-                })
-                registrar_app(app["name"], "Ocio")
-            else: #En este caso la app no esta en steam
-                apps_categorizadas.append({
-                    "nombre": app["name"],
-                    "categoria": "Indefinida"
-                })
-                registrar_app(app["name"], "Indefinida")
-    desconectar_bd(conn)  #Desconectamos la base de datos
-    return apps_categorizadas #Return de cada app
-
-
+            steam_match = difflib.get_close_matches(nombre_app.lower(), steam_nombres, n=1, cutoff=0.8)
+            if steam_match:
+                categoria = "Ocio"
+                registrar_app(nombre_app, categoria)
+            else:
+                # Si no se encuentra en la base de datos ni en el JSON, asignar "Indefinida"
+                categoria = "Indefinida"
+                registrar_app(nombre_app, categoria)
+        apps_categorizadas.append({
+            "nombre": nombre_app,
+            "categoria": categoria
+        })
+    desconectar_bd(conn)
+    return apps_categorizadas
