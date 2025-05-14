@@ -1,7 +1,67 @@
-*{
-    color: #9CA3AF;
-}
-
+/* Estilos para apps-list */
+body {
+    margin: 20px;
+    padding: 0;
+    background-color: #111827;
+    color: #F9FAFB;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
 .apps-list {
+    padding: 20px;
     background-color: #1F2937;
-}
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    max-width: 700px;
+    margin: 20px auto;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  
+  /* Estilo para la tabla */
+  .apps-list table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+    color: #e0e0e0;
+  }
+  
+  /* Encabezados */
+  .apps-list th {
+    background-color: #2a2a40;
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 2px solid #444;
+  }
+  
+  /* Celdas */
+  .apps-list td {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+  }
+  
+  /* Alternar color de filas */
+  .apps-list tr:nth-child(even) {
+    background-color: #26263a;
+  }
+  
+  /* Hover en fila */
+  .apps-list tr:hover {
+    background-color: #33334d;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Ajuste para texto */
+  .apps-list td, .apps-list th {
+    white-space: nowrap;
+  }
+  
+  /* Redondeo de esquinas en primera y última celda de encabezado */
+  .apps-list th:first-child {
+    border-top-left-radius: 8px;
+  }
+  .apps-list th:last-child {
+    border-top-right-radius: 8px;
+  }
+  
