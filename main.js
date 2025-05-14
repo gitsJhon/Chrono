@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu } = require('electron');
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 800,
+    width: 850,
     height: 600,
   });
   Menu.setApplicationMenu(null); // Hide the menu bar
