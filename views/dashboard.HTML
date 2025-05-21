@@ -1,26 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/dashboard.CSS">
-    <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="../styles/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="apps-list">
-        <table id="appsTable" border="1">
-          <thead>
-            <tr>
-              <th>App</th>
-              <th>Categoria</th>
-              <th>Ultima apertura</th>
-            </tr>
-          </thead>
-          <tbody id="appsTableBody">
-            <!-- Se agregan filas dinámicamente -->
-          </tbody>
-        </table>
-      </div>
-      <script src="../front-end-controles/dashboard.js"></script>
+
+  <div class="switch-container">
+    <span>Tabla</span>
+    <label class="switch">
+      <input type="checkbox" id="toggleView">
+      <span class="slider"></span>
+    </label>
+    <span>Gráfico</span>
+  </div>
+
+  <div class="apps-list active" id="appsView">
+    <table id="appsTable" border="1">
+      <thead>
+        <tr>
+          <th>App</th>
+          <th>Categoría</th>
+          <th>Última apertura</th>
+        </tr>
+      </thead>
+      <tbody id="appsTableBody">
+        <!-- Se agregan filas dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+
+<div id="graficoView" class="view">
+  <canvas id="graficoConsumo"></canvas>
+</div>
+
+
+  <script src="../front-end-controles/dashboard.js"></script>
 </body>
 </html>
