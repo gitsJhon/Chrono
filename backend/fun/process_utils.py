@@ -43,5 +43,3 @@ def get_user_apps():
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue
     return user_apps
-
-print(get_user_apps())
