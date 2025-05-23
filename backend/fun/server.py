@@ -1,3 +1,4 @@
+
 import asyncio
 import json
 import websockets
@@ -33,3 +34,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+import os
+print(os.path.abspath(__file__))
